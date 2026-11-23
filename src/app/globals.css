@@ -1,26 +1,109 @@
 @import "tailwindcss";
 
+/* FilaFitness: white background, navy text, blue accent. Always light. */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: light;
+  --paper: #ffffff;
+  --card: #ffffff;
+  --ink: #0f1b33;
+  --muted: #5d6b85;
+  --line: #dde5f2;
+  --accent: #1f5fe0;
+  --accent-ink: #ffffff;
+  --protein: #2f80ed;
+  --carbs: #c68a12;
+  --fat: #7a4fb5;
+  --kcal: #0f1b33;
+  --warn: #b4531f;
+  --warn-bg: #fdeee4;
+  --good: #1f8a4c;
+  --estimate: #4b45c6;
+  --estimate-bg: #ecebfd;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-paper: var(--paper);
+  --color-card: var(--card);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-protein: var(--protein);
+  --color-carbs: var(--carbs);
+  --color-fat: var(--fat);
+  --color-warn: var(--warn);
+  --color-warn-bg: var(--warn-bg);
+  --color-good: var(--good);
+  --color-estimate: var(--estimate);
+  --color-estimate-bg: var(--estimate-bg);
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-feature-settings: "tnum" 1;
 }
+
+@utility card {
+    @apply rounded-2xl border border-line bg-card;
+  }
+
+@utility btn {
+    @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-line bg-card px-4 text-[15px] font-semibold text-ink active:scale-[0.98] disabled:opacity-50 transition-transform select-none;
+  }
+
+@utility btn-primary {
+    @apply btn border-transparent bg-accent text-white;
+  }
+
+@utility btn-ink {
+    @apply btn border-transparent bg-ink text-paper;
+  }
+
+@utility btn-ghost {
+    @apply btn border-transparent bg-transparent;
+  }
+
+@utility btn-danger {
+    @apply btn border-transparent bg-warn-bg text-warn;
+  }
+
+@utility input {
+    @apply min-h-12 w-full rounded-xl border border-line bg-card px-3 text-[16px] text-ink outline-none placeholder:text-muted focus:border-ink;
+  }
+
+@utility label {
+    @apply mb-1 block text-[13px] font-medium text-muted;
+  }
+
+@utility chip {
+    @apply inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-semibold;
+  }
+
+@utility chip-estimate {
+    @apply chip bg-estimate-bg text-estimate;
+  }
+
+@utility chip-warn {
+    @apply chip bg-warn-bg text-warn;
+  }
+
+@utility page {
+    @apply mx-auto w-full max-w-xl px-4 pb-32 pt-4;
+  }
+
+@utility h1 {
+    @apply text-2xl font-bold tracking-tight;
+  }
+
+@utility section-title {
+    @apply text-[13px] font-semibold uppercase tracking-wider text-muted;
+  }
