@@ -29,6 +29,7 @@ import { updateProfile } from '@/server/services/profile';
 import { createPersonalToken, revokeToken } from '@/server/services/tokens';
 import { acceptShare, createShare, declineShare } from '@/server/services/shares';
 import { importStarterFoods } from '@/server/demo';
+import { addWater } from '@/server/services/water';
 
 export type ActionResult<T = null> = { ok: true; data: T } | { ok: false; error: string };
 
@@ -254,4 +255,47 @@ export async function declineShareAction(id: string) {
 }
 export async function importStarterAction() {
   return act((tx) => importStarterFoods(tx));
+}
+
+export async function addWaterAction(date: string, deltaMl: number) {
+  return act((tx) => addWater(tx, dateSchema.parse(date), z.number().int().parse(deltaMl)));
+}
+
+const onlineFoodSchema = z.object({
+  code: z.string().regex(/^\d{4,14}$/),
+  name: z.string().trim().min(1).max(200),
+  brand: z.string().max(120).nullable(),
+  kcal: z.number().min(0).max(950),
+  protein_g: z.number().min(0).nullable(),
+  carbs_g: z.number().min(0).nullable(),
+  fat_g: z.number().min(0).nullable(),
+  serving_g: z.number().positive().nullable(),
+  serving_label: z.string().max(40).nullable(),
+});
+
+/** Save an Open Food Facts result into your own library (reusing it if the barcode is already saved). */
+export async function importOnlineFoodAction(raw: unknown) {
+  return act(async (tx) => {
+    const f = onlineFoodSchema.parse(raw);
+    const [existing] = await tx<{ id: string }[]>`select id from foods where barcode = ${f.code} and not archived limit 1`;
+    if (existing) return existing.id;
+    const food = await createFood(tx, {
+      name: f.name,
+      brand: f.brand,
+      barcode: f.code,
+      aliases: [],
+      basis: 'per_100g',
+      kcal: f.kcal,
+      protein_g: f.protein_g,
+      carbs_g: f.carbs_g,
+      fat_g: f.fat_g,
+      units: f.serving_g ? [{ unit: 'serving', label: f.serving_label, grams: f.serving_g }] : [],
+      default_amount: f.serving_g ? 1 : 100,
+      default_unit: f.serving_g ? 'serving' : 'g',
+      source: 'open_food_facts',
+      source_label: 'Open Food Facts',
+      is_favorite: false,
+    });
+    return food.id;
+  });
 }

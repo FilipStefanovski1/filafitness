@@ -117,4 +117,5 @@ export const profileInputSchema = z.object({
   carbs_target_g: optNum(0).optional(),
   fat_target_g: optNum(0).optional(),
   goal_weight_kg: optNum(0).optional(),
+  water_target_ml: z.coerce.number().int().min(0).max(10000).optional(),
 });

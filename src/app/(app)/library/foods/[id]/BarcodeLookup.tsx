@@ -27,6 +27,7 @@ export function BarcodeLookup({ barcode, onResult }: { barcode: string; onResult
           const j = await r.json();
           setState('done');
           if (!r.ok) return setMsg(j.error);
+          if (j.own) return setMsg(`Already in your library as “${j.own.name}”.`);
           onResult(j);
           setMsg('Filled from Open Food Facts (per 100 g). Check it against the label.');
         }}

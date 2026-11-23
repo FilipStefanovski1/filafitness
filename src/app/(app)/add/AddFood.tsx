@@ -5,6 +5,7 @@ import { quickLogAction, copyEntriesAction } from '@/app/actions';
 import { useAction } from '@/components/useAction';
 import { ErrorText, Header, MacroLine } from '@/components/ui';
 import { SlotPicker } from '@/components/SlotPicker';
+import { OnlineSearch } from './OnlineSearch';
 import { matchScore } from '@/lib/search';
 import { fmtAmount, fmtKcal } from '@/lib/nutrition/format';
 import type { LibraryItem } from '@/server/services/library';
@@ -55,25 +56,19 @@ export function AddFood(props: {
       <Header title="Add food" back={`/?date=${props.date}`} />
       <SlotPicker value={slot} onChange={setSlot} />
 
-      <div className="mt-3 grid grid-cols-3 gap-2">
-        <Link href={`/estimate?${qs}`} className="btn h-auto flex-col gap-0.5 px-2 py-2 text-[13px] leading-tight">
-          <span aria-hidden className="text-lg">
-            ✦
-          </span>
-          Paste GPT estimate
-        </Link>
-        <Link href={`/quick?${qs}`} className="btn h-auto flex-col gap-0.5 px-2 py-2 text-[13px] leading-tight">
-          <span aria-hidden className="text-lg">
-            ⚡
-          </span>
-          Quick add
-        </Link>
-        <Link href={`/library/foods/new?log=1&${qs}`} className="btn h-auto flex-col gap-0.5 px-2 py-2 text-[13px] leading-tight">
-          <span aria-hidden className="text-lg">
-            ＋
-          </span>
-          New food
-        </Link>
+      <div className="mt-3 grid grid-cols-4 gap-2">
+        <QuickTile
+          href={`/scan?${qs}`}
+          label="Scan barcode"
+          icon="M4 7V5a1 1 0 0 1 1-1h2M17 4h2a1 1 0 0 1 1 1v2M20 17v2a1 1 0 0 1-1 1h-2M7 20H5a1 1 0 0 1-1-1v-2M8 8v8M11 8v8M14 8v8M17 8v8"
+        />
+        <QuickTile
+          href={`/estimate?${qs}`}
+          label="Paste GPT"
+          icon="M12 3l1.9 4.6L18.5 9l-4.6 1.9L12 15.5l-1.9-4.6L5.5 9l4.6-1.4L12 3ZM18 15l.9 2.1L21 18l-2.1.9L18 21l-.9-2.1L15 18l2.1-.9L18 15Z"
+        />
+        <QuickTile href={`/quick?${qs}`} label="Quick add" icon="M13 2 4 14h7l-1 8 9-12h-7l1-8Z" />
+        <QuickTile href={`/library/foods/new?log=1&${qs}`} label="New food" icon="M12 5v14M5 12h14" />
       </div>
 
       <div className="relative mt-3">
@@ -195,6 +190,8 @@ export function AddFood(props: {
         ))}
       </ul>
 
+      <OnlineSearch q={q} qs={qs} auto={list.length === 0} />
+
       {!q && tab === 'recent' && props.oneOffs.length > 0 && (
         <section className="mt-5">
           <h2 className="section-title mb-2 px-1">Recent one-offs</h2>
@@ -227,5 +224,30 @@ export function AddFood(props: {
         </section>
       )}
     </main>
+  );
+}
+
+function QuickTile({ href, label, icon }: { href: string; label: string; icon: string }) {
+  return (
+    <Link
+      href={href}
+      className="flex min-h-[76px] flex-col items-center justify-center gap-1.5 rounded-2xl border border-line bg-card px-1 text-center text-[12px] font-semibold leading-tight active:scale-[0.97]"
+    >
+      <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-accent/10 text-accent">
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d={icon} />
+        </svg>
+      </span>
+      {label}
+    </Link>
   );
 }

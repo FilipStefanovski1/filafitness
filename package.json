@@ -16,12 +16,14 @@
     "db:reset": "supabase db reset",
     "seed:demo": "tsx --conditions=react-server scripts/seed-demo.ts",
     "invite": "tsx --conditions=react-server scripts/invite.ts",
-    "token": "tsx --conditions=react-server scripts/create-token.ts"
+    "token": "tsx --conditions=react-server scripts/create-token.ts",
+    "postinstall": "mkdir -p public/zxing && cp node_modules/zxing-wasm/dist/reader/zxing_reader.wasm public/zxing/"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.32.2",
     "@supabase/ssr": "^0.12.7",
     "@supabase/supabase-js": "^2.119.2",
+    "barcode-detector": "^3.2.4",
     "decimal.js": "^10.6.0",
     "next": "16.4.6",
     "postgres": "^3.4.9",

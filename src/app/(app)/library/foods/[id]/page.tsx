@@ -11,7 +11,7 @@ export default async function FoodPage({
   searchParams,
 }: {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ log?: string; date?: string; slot?: string }>;
+  searchParams: Promise<{ log?: string; date?: string; slot?: string; barcode?: string }>;
 }) {
   const { userId } = await requireUser();
   const { id } = await params;

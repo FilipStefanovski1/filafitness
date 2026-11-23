@@ -12,6 +12,7 @@ export interface Profile {
   carbs_target_g: number | null;
   fat_target_g: number | null;
   goal_weight_kg: number | null;
+  water_target_ml: number;
   onboarded: boolean;
 }
 
@@ -35,6 +36,7 @@ export async function updateProfile(tx: Tx, userId: string, raw: unknown, opts: 
       carbs_target_g = ${input.carbs_target_g ?? null},
       fat_target_g = ${input.fat_target_g ?? null},
       goal_weight_kg = ${input.goal_weight_kg ?? null},
+      water_target_ml = coalesce(${input.water_target_ml ?? null}::int, water_target_ml),
       onboarded = onboarded or ${!!opts.onboard}
     where user_id = ${userId} returning *`;
   if (!p) throw new AppError('Profile not found', 404);

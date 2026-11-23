@@ -29,12 +29,14 @@ export function FoodForm({
   meta,
   recipients,
   logAfter,
+  barcode,
 }: {
   id: string | null;
   initial: FoodInput | null;
   meta: { source: string; archived: boolean } | null;
   recipients: { user_id: string; display_name: string }[];
   logAfter: string | null;
+  barcode?: string | null;
 }) {
   const router = useRouter();
   const { run, pending, error } = useAction();
@@ -42,7 +44,7 @@ export function FoodForm({
   const [f, setF] = useState({
     name: i?.name ?? '',
     brand: i?.brand ?? '',
-    barcode: i?.barcode ?? '',
+    barcode: i?.barcode ?? barcode ?? '',
     aliases: (i?.aliases ?? []).join(', '),
     basis: (i?.basis ?? 'per_100g') as Basis,
     serving_label: i?.serving_label ?? '',

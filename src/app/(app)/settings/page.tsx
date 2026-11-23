@@ -9,6 +9,7 @@ import { ProfileForm } from '@/components/ProfileForm';
 import { McpTokens } from './McpTokens';
 import { SharesInbox } from './SharesInbox';
 import { DataTools } from './DataTools';
+import { InstallApp } from '@/components/InstallApp';
 
 export default async function SettingsPage() {
   const { userId, profile } = await requireUser();
@@ -21,6 +22,8 @@ export default async function SettingsPage() {
       <header style={{ paddingTop: 'env(safe-area-inset-top)' }}>
         <h1 className="h1">Settings</h1>
       </header>
+
+      <InstallApp />
 
       {pending.length > 0 && (
         <SharesInbox
