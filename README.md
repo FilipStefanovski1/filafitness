@@ -43,6 +43,12 @@ Stack: **Next.js 16 (App Router) · TypeScript · Tailwind v4 · Supabase Auth +
 
 **Weight**: one private weigh-in per day (kg), editable by date. The chart shows recorded weigh-ins and the rolling 7-day average of *recorded* days; gaps stay gaps and are never filled with zero. Windows with fewer than 4 weigh-ins are flagged as sparse, and the current 7 days are compared with the previous 7.
 
+**Today** also shows a calorie ring (Goal − Food = Remaining), protein, carbs and fat with targets or % of calories, a logging streak, and a water tracker (+glass, +500 mL, goal in Settings).
+
+**Online foods and barcodes**: when nothing saved matches, Add Food searches **Open Food Facts** (free). **Scan barcode** uses the phone camera: native BarcodeDetector on Android, ZXing WebAssembly (served from this site) on iPhone. It checks your own library first, then Open Food Facts, then offers manual label entry. Online values are per 100 g and saved into your own library, where you can edit them.
+
+**Installable app (PWA)**: a custom icon set (192/512/maskable/Apple touch), a manifest with shortcuts (Add food, Paste GPT estimate, Log weight), and a service worker that caches the app shell and shows an offline page. Diary data is never cached. Settings shows an **Install** button on Android/desktop Chrome, and on iPhone use Safari → Share → **Add to Home Screen**.
+
 **Also**: weekly calorie and protein averages (over logged days only), editable goals, a timezone setting (default Europe/Skopje, which decides which day a late meal belongs to), CSV export of your own diary and weigh-ins, an optional "Import starter foods" button (generic USDA-rounded values), and an installable PWA manifest.
 
 ### GPT estimates
@@ -232,6 +238,12 @@ To disconnect, go to **Settings → Revoke**. Revoking an OAuth connection also 
 - Dates are plain `date` values in the user's timezone. `defaultLogTarget(tz, now)` decides the day and meal for "now", so 00:15 in Skopje is the new day.
 - `src/server/mcp/server.ts`: the MCP tools, thin wrappers over the same services. `src/server/oauth/*` plus the `/oauth/*` and `/.well-known/*` routes form a minimal OAuth 2.1 authorization server (DCR, PKCE S256, refresh rotation).
 - Food search keys transliterate Macedonian Cyrillic and fold romanizations (ж/zh/ž, ќ/kj/ć, ш/sh/š…).
+
+## Live deployment
+
+- App: https://filafitness.vercel.app (Vercel project `filafitness`; every push to `main` deploys)
+- Database: Supabase project `filafitness` (`iqyepshlofrtqjefahfk`, eu-central-1). Production secrets are in `.env.production.local` (git-ignored) and in Vercel env vars.
+- New migrations: `supabase db push` (linked project).
 
 ## Verification status
 
